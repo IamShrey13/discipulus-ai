@@ -165,8 +165,29 @@ function App() {
   const [loadingReviewId, setLoadingReviewId] = useState<number | null>(null);
   const [topic, setTopic] = useState("");
   const [generatingQuestions, setGeneratingQuestions] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedChapter, setSelectedChapter] = useState("");
+  // Restore the current subject/chapter selection after a browser refresh.
+  const [selectedSubject, setSelectedSubject] = useState(() =>
+    window.localStorage.getItem("discipulus_selected_subject") || ""
+  );
+  const [selectedChapter, setSelectedChapter] = useState(() =>
+    window.localStorage.getItem("discipulus_selected_chapter") || ""
+  );
+
+  useEffect(() => {
+    if (selectedSubject) {
+      window.localStorage.setItem("discipulus_selected_subject", selectedSubject);
+    } else {
+      window.localStorage.removeItem("discipulus_selected_subject");
+    }
+  }, [selectedSubject]);
+
+  useEffect(() => {
+    if (selectedChapter) {
+      window.localStorage.setItem("discipulus_selected_chapter", selectedChapter);
+    } else {
+      window.localStorage.removeItem("discipulus_selected_chapter");
+    }
+  }, [selectedChapter]);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [result, setResult] = useState<AssessmentResponse | null>(null);
   const [loadingSubjects, setLoadingSubjects] = useState(false);
@@ -314,7 +335,6 @@ function App() {
     let cancelled = false;
     async function loadChapters() {
       setChapters([]);
-      setSelectedChapter("");
       setQuestions([]);
       setGeneratedQuestions([]);
       setAnswers({});
