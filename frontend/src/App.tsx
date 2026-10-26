@@ -125,10 +125,37 @@ function App() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [registering, setRegistering] = useState(false);
   const [registrationMessage, setRegistrationMessage] = useState("");
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [loggedInUser, setLoggedInUser] = useState("");
+  // Restore the signed-in session after a page refresh. The browser history can
+  // remember that the user was on the dashboard, but React state resets on reload.
+  const [accessToken, setAccessToken] = useState<string | null>(() =>
+    window.localStorage.getItem("discipulus_access_token")
+  );
+  const [loggedInUser, setLoggedInUser] = useState(() =>
+    window.localStorage.getItem("discipulus_logged_in_user") || ""
+  );
   const [loggingIn, setLoggingIn] = useState(false);
-  const [classLevel, setClassLevel] = useState<11 | 12>(11);
+  const [classLevel, setClassLevel] = useState<11 | 12>(() => {
+    const savedClass = window.localStorage.getItem("discipulus_class_level");
+    return savedClass === "12" ? 12 : 11;
+  });
+
+  // Keep session details available across refreshes and direct page reloads.
+  useEffect(() => {
+    if (accessToken) {
+      window.localStorage.setItem("discipulus_access_token", accessToken);
+    } else {
+      window.localStorage.removeItem("discipulus_access_token");
+    }
+
+    if (loggedInUser) {
+      window.localStorage.setItem("discipulus_logged_in_user", loggedInUser);
+    } else {
+      window.localStorage.removeItem("discipulus_logged_in_user");
+    }
+
+    window.localStorage.setItem("discipulus_class_level", String(classLevel));
+  }, [accessToken, loggedInUser, classLevel]);
+
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -240,6 +267,9 @@ function App() {
   }
 
   function handleLogout() {
+    window.localStorage.removeItem("discipulus_access_token");
+    window.localStorage.removeItem("discipulus_logged_in_user");
+    window.localStorage.removeItem("discipulus_class_level");
     setAccessToken(null);
     setLoggedInUser("");
     setPassword("");
