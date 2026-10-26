@@ -3,6 +3,9 @@ import os
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+from fastapi import HTTPException, status
+from jwt import InvalidTokenError
+
 import jwt
 from dotenv import load_dotenv
 
@@ -37,4 +40,31 @@ def create_access_token(user_id: int) -> str:
         algorithm=ALGORITHM,
     )
 
-    return token
+    return str(token)
+
+
+def get_user_id_from_token(token: str) -> int:
+    """Validate a JWT and return the authenticated user's ID."""
+    try:
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=[ALGORITHM],
+        )
+    except InvalidTokenError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired access token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    subject = payload.get("sub")
+
+    if not isinstance(subject, str) or not subject.isdigit():
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token subject",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return int(subject)

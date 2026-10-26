@@ -1,0 +1,36 @@
+/* Landing-page styles are deliberately scoped to .discipulus-home. Existing app styles remain untouched. */
+.discipulus-home { color: #e9edf7; }
+.discipulus-home * { box-sizing: border-box; }
+.discipulus-home .home-hero { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr); gap:clamp(24px,5vw,72px); align-items:center; padding:clamp(26px,5vw,64px); border:1px solid rgba(153,173,211,.2); border-radius:24px; background:radial-gradient(ellipse at 85% 20%,rgba(105,125,245,.16),transparent 42%),linear-gradient(135deg,rgba(20,28,48,.96),rgba(13,20,38,.92)); overflow:hidden; }
+.discipulus-home .home-eyebrow { color:#9eafff; font-size:.72rem; font-weight:800; letter-spacing:.16em; line-height:1.6; }
+.discipulus-home .home-hero h1 { max-width:760px; margin:18px 0; font-size:clamp(2.35rem,5vw,4.5rem); line-height:1.06; letter-spacing:-.055em; font-family:Manrope,system-ui,sans-serif; }
+.discipulus-home em { color:#9baaff; font-style:normal; }
+.discipulus-home .home-lead { max-width:620px; color:#aab7d0; font-size:1.02rem; line-height:1.8; }
+.discipulus-home .home-actions { display:flex; flex-wrap:wrap; gap:12px; margin:28px 0 30px; }
+.discipulus-home .home-actions button,.discipulus-home .home-bottom-cta button { border:1px solid #7f91ff; border-radius:11px; background:#7b8cff; color:#0b1020; padding:13px 18px; font:700 .94rem inherit; cursor:pointer; }
+.discipulus-home .home-actions .home-secondary { border-color:rgba(153,173,211,.28); background:rgba(255,255,255,.035); color:#e9edf7; }
+.discipulus-home .home-proof { display:flex; flex-wrap:wrap; gap:22px; color:#aab7d0; font-size:.84rem; }
+.discipulus-home .home-proof b { color:#e9edf7; margin-right:7px; }
+.discipulus-home .home-hero-visual { position:relative; min-height:340px; display:grid; place-items:center; }
+.discipulus-home .orbit { position:absolute; width:min(90%,330px); aspect-ratio:1; border:1px solid rgba(139,156,255,.28); border-radius:50%; }
+.discipulus-home .orbit-two { width:min(67%,245px); border-style:dashed; transform:rotate(28deg); }
+.discipulus-home .home-core { z-index:1; width:142px; height:142px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:9px; border:1px solid rgba(169,181,255,.65); border-radius:34px; background:linear-gradient(145deg,#26345d,#121b32); box-shadow:0 0 70px rgba(105,125,245,.22); }
+.discipulus-home .home-core span { font:800 2.4rem Manrope,sans-serif; color:#aab5ff; }
+.discipulus-home .home-core small { color:#b7c2df; font-size:.58rem; letter-spacing:.12em; text-align:center; }
+.discipulus-home .orbit-node { position:absolute; display:flex; flex-direction:column; align-items:center; justify-content:center; width:76px; height:76px; border:1px solid rgba(153,173,211,.25); border-radius:20px; background:#17223b; color:#aab5ff; font-size:1.4rem; box-shadow:0 10px 35px #080d1a88; }
+.discipulus-home .orbit-node small { color:#c5cee3; font-size:.62rem; }
+.discipulus-home .node-a { top:8%; right:13%; }.discipulus-home .node-b { bottom:10%; right:10%; }.discipulus-home .node-c { bottom:18%; left:8%; }
+.discipulus-home .home-section { padding:clamp(34px,5vw,66px) 0 8px; }
+.discipulus-home .home-section-heading { max-width:650px; margin:0 auto 32px; text-align:center; }
+.discipulus-home .home-section-heading h2 { margin:12px 0; font:800 clamp(2rem,4vw,3.1rem)/1.12 Manrope,system-ui,sans-serif; letter-spacing:-.045em; }
+.discipulus-home .home-section-heading p { color:#aab7d0; line-height:1.7; }
+.discipulus-home .home-feature-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.discipulus-home .home-feature-card { position:relative; min-height:225px; padding:24px; border:1px solid rgba(153,173,211,.18); border-radius:17px; background:linear-gradient(145deg,rgba(24,35,59,.85),rgba(15,23,42,.8)); }
+.discipulus-home .home-card-number { color:#8f9ff8; font-size:.72rem; font-weight:800; letter-spacing:.1em; }.discipulus-home .home-card-mark { margin:16px 0 12px; color:#9eafff; font-size:1.4rem; }
+.discipulus-home .home-feature-card h3 { margin:0 0 10px; font:700 1.03rem/1.4 Manrope,system-ui,sans-serif; }.discipulus-home .home-feature-card p,.discipulus-home .home-step p { margin:0; color:#9eacc7; font-size:.9rem; line-height:1.7; }.discipulus-home .home-card-arrow { position:absolute; top:22px; right:22px; color:#7e8fff; }
+.discipulus-home .home-how { padding-bottom:28px; }.discipulus-home .home-steps { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
+.discipulus-home .home-step { padding:20px 17px; border-top:1px solid rgba(139,156,255,.55); background:rgba(20,28,48,.52); border-radius:0 0 12px 12px; }
+.discipulus-home .home-step-number { display:inline-flex; margin-bottom:18px; color:#9eafff; font:800 1.2rem Manrope,sans-serif; }.discipulus-home .home-step h3 { margin:0 0 9px; font:700 .95rem/1.4 Manrope,system-ui,sans-serif; }
+.discipulus-home .home-bottom-cta { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-top:34px; padding:28px; border:1px solid rgba(139,156,255,.25); border-radius:18px; background:linear-gradient(110deg,rgba(70,87,170,.18),rgba(20,28,48,.7)); }.discipulus-home .home-bottom-cta h2 { margin:8px 0 0; font:700 clamp(1.3rem,3vw,2rem) Manrope,system-ui,sans-serif; }
+@media(max-width:900px){.discipulus-home .home-hero{grid-template-columns:1fr}.discipulus-home .home-hero-visual{min-height:290px}.discipulus-home .home-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discipulus-home .home-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.discipulus-home .home-hero{padding:24px 18px}.discipulus-home .home-hero-visual{min-height:250px}.discipulus-home .home-feature-grid,.discipulus-home .home-steps{grid-template-columns:1fr}.discipulus-home .home-feature-card{min-height:190px}.discipulus-home .home-bottom-cta{align-items:flex-start;flex-direction:column}}

@@ -6,6 +6,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
+    Float,
     String,
     Text,
     func,
@@ -112,3 +113,33 @@ class Attempt(Base):
     )
 
     student: Mapped["User"] = relationship(back_populates="attempts")
+
+
+class GeneratedAssessmentQuestion(Base):
+    """Private answer key and metadata for a Gemini-generated assessment."""
+    __tablename__ = "generated_assessment_questions"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    assessment_id: Mapped[int] = mapped_column(ForeignKey("assessments.id", ondelete="CASCADE"), nullable=False, index=True)
+    question_order: Mapped[int] = mapped_column(Integer, nullable=False)
+    question_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    prompt: Mapped[str] = mapped_column(Text, nullable=False)
+    options_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    correct_option: Mapped[str | None] = mapped_column(String(1), nullable=True)
+    expected_answer: Mapped[str] = mapped_column(Text, nullable=False)
+    rubric_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    explanation: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    topic: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    bloom_level: Mapped[str] = mapped_column(String(30), nullable=False, default="Understand")
+    difficulty: Mapped[str] = mapped_column(String(20), nullable=False, default="medium")
+
+
+class AssessmentReview(Base):
+    """Persisted detailed feedback for a submitted assessment attempt."""
+    __tablename__ = "assessment_reviews"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    attempt_id: Mapped[int] = mapped_column(ForeignKey("attempts.id", ondelete="CASCADE"), unique=True, nullable=False, index=True)
+    score_awarded: Mapped[float] = mapped_column(Float, nullable=False)
+    max_score: Mapped[float] = mapped_column(Float, nullable=False)
+    percentage: Mapped[float] = mapped_column(Float, nullable=False)
+    results_json: Mapped[str] = mapped_column(Text, nullable=False)
+    overall_feedback: Mapped[str] = mapped_column(Text, nullable=False, default="")

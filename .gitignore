@@ -1,5 +1,4 @@
-@'
-# Environment variables and secrets
+﻿# Environment variables and secrets
 .env
 .env.*
 !.env.example
@@ -22,4 +21,3 @@ coverage/
 .vscode/
 .DS_Store
 Thumbs.db
-'@ | Set-Content -Encoding utf8 .gitignore
