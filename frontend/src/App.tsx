@@ -190,6 +190,25 @@ function App() {
   }, [selectedChapter]);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [result, setResult] = useState<AssessmentResponse | null>(null);
+
+  // Assessment feedback is returned by the API but React state is lost on refresh.
+  // Restore the last submitted result for the currently signed-in student.
+  useEffect(() => {
+    if (!accessToken || !loggedInUser || page !== "results" || result) return;
+    const storageKey = `discipulus_last_assessment_result:${loggedInUser}`;
+    try {
+      const saved = window.localStorage.getItem(storageKey);
+      if (!saved) return;
+      const parsed = JSON.parse(saved) as AssessmentResponse;
+      if (parsed && Array.isArray(parsed.results) && typeof parsed.percentage === "number") {
+        setResult(parsed);
+      } else {
+        window.localStorage.removeItem(storageKey);
+      }
+    } catch {
+      window.localStorage.removeItem(storageKey);
+    }
+  }, [accessToken, loggedInUser, page, result]);
   const [loadingSubjects, setLoadingSubjects] = useState(false);
   const [loadingChapters, setLoadingChapters] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -288,6 +307,9 @@ function App() {
   }
 
   function handleLogout() {
+    if (loggedInUser) {
+      window.localStorage.removeItem(`discipulus_last_assessment_result:${loggedInUser}`);
+    }
     window.localStorage.removeItem("discipulus_access_token");
     window.localStorage.removeItem("discipulus_logged_in_user");
     window.localStorage.removeItem("discipulus_class_level");
@@ -338,7 +360,7 @@ function App() {
       setQuestions([]);
       setGeneratedQuestions([]);
       setAnswers({});
-      setResult(null);
+      if (page !== "results") setResult(null);
       if (!selectedSubject) { setLoadingChapters(false); return; }
       setLoadingChapters(true);
       try {
@@ -352,16 +374,16 @@ function App() {
     }
     void loadChapters();
     return () => { cancelled = true; };
-  }, [selectedSubject]);
+  }, [selectedSubject, page]);
 
   useEffect(() => {
     // AI questions are generated on demand rather than loaded automatically from PostgreSQL.
     setQuestions([]);
     setGeneratedQuestions([]);
     setAnswers({});
-    setResult(null);
+    if (page !== "results") setResult(null);
     setTopic("");
-  }, [selectedChapter]);
+  }, [selectedChapter, page]);
 
   useEffect(() => {
     let cancelled = false;
@@ -465,6 +487,7 @@ function App() {
           generatedQuestions.map((question) => ({ question_id: question.id, answer: answers[question.id] || "" })),
           accessToken,
         );
+        window.localStorage.setItem(`discipulus_last_assessment_result:${loggedInUser}`, JSON.stringify(response));
         setResult(response);
       } else {
         if (questions.length === 0) { setError("Generate an AI assessment first."); return; }
@@ -474,6 +497,7 @@ function App() {
           questions.map((question) => ({ question_id: question.id, selected_option: answers[question.id] })),
           accessToken,
         );
+        window.localStorage.setItem(`discipulus_last_assessment_result:${loggedInUser}`, JSON.stringify(response));
         setResult(response);
       }
       setHistoryRefresh((previous) => previous + 1);
@@ -817,7 +841,7 @@ function App() {
               {item.explanation && <p><strong>Explanation:</strong> {item.explanation}</p>}
             </article>;
           })}
-          <div className="button-row"><button type="button" onClick={() => { setAnswers({}); setResult(null); setGeneratedQuestions([]); setGeneratedAssessmentId(null); navigateTo("assessment"); }}>Try another assessment</button><button className="secondary-button" type="button" onClick={() => navigateTo("dashboard")}>View dashboard</button></div>
+          <div className="button-row"><button type="button" onClick={() => { if (loggedInUser) window.localStorage.removeItem(`discipulus_last_assessment_result:${loggedInUser}`); setAnswers({}); setResult(null); setGeneratedQuestions([]); setGeneratedAssessmentId(null); navigateTo("assessment"); }}>Try another assessment</button><button className="secondary-button" type="button" onClick={() => navigateTo("dashboard")}>View dashboard</button></div>
         </section>
       )}
 
